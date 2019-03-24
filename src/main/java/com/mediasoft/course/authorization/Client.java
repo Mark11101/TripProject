@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 public class Client implements Runnable {
 
-    static Server s = new Server();
-    static Thread th = new Thread(s);
-    static Client cn = new Client();
+    private static Server s = new Server();
+    private static Thread th = new Thread(s);
+    private static Client cn = new Client();
 
     public static void stream() {
         th.start();
@@ -71,23 +71,29 @@ public class Client implements Runnable {
                 socket.shutdownOutput();
 
                 String answer = in.readLine();
-                if (answer.equals("successIN")) {
-                    System.out.println("\n Вы успешно авторизовались");
-                    Menu m = new Menu();
-                    m.Info();
-                    close();
-                } else if (answer.equals("successUP")) {
-                    System.out.println("\n Вы успешно зарегестрировались");
-                    run();
-                } else if (answer.equals("errorLogin")) {
-                    System.out.println("\n Пользователь с таким именем уже существует");
-                    run();
-                } else if (answer.equals("errorNull")) {
-                    System.out.println("\n Вы не заполнили одно из полей");
-                    run();
-                } else {
-                    System.out.println("\n Неверный логин или пароль");
-                    run();
+                switch (answer) {
+                    case "successIN":
+                        System.out.println("\n Вы успешно авторизовались");
+                        Menu m = new Menu();
+                        m.Info();
+                        close();
+                        break;
+                    case "successUP":
+                        System.out.println("\n Вы успешно зарегестрировались");
+                        run();
+                        break;
+                    case "errorLogin":
+                        System.out.println("\n Пользователь с таким именем уже существует");
+                        run();
+                        break;
+                    case "errorNull":
+                        System.out.println("\n Вы не заполнили одно из полей");
+                        run();
+                        break;
+                    default:
+                        System.out.println("\n Неверный логин или пароль");
+                        run();
+                        break;
                 }
             }
 
@@ -102,7 +108,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void close() {
+    private void close() {
         try {
             Globals.isRunning = false;
         } catch (Exception e) {e.printStackTrace();}

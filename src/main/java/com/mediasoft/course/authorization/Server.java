@@ -74,7 +74,7 @@ public class Server implements Runnable {
         }
     }
 
-    public void FileIN(File file1) throws FileNotFoundException {
+    private void FileIN(File file1) throws FileNotFoundException {
 
         FileReader fr = new FileReader(file1);
         Scanner scan = new Scanner(fr);
@@ -87,7 +87,7 @@ public class Server implements Runnable {
         }
     }
 
-    public void FileUP(String NameInput) throws IOException {
+    private void FileUP(String NameInput) throws IOException {
         File file = new File("Accounts/" + NameInput + ".txt");
 
         if (!file.exists()) {
@@ -105,7 +105,7 @@ public class Server implements Runnable {
         bw.close();
     }
 
-    public void close() {
+    private void close() {
         try {
             Globals.isRunning = false;
         } catch (Exception e) {e.printStackTrace();}

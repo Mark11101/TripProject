@@ -14,13 +14,12 @@ public class Connector {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         java.sql.Connection conn = DriverManager.getConnection(connectionURL, userName, password);
-        Statement statement = conn.createStatement();
 
-        return statement;
+        return conn.createStatement();
     }
 
-    public static int y;
-    public static String[] elements = null;
+    static int y;
+    static String[] elements = null;
 
     public void OutBD(ResultSet resultSet, ResultSet resultSetCNT) throws SQLException {
 

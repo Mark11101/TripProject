@@ -25,7 +25,7 @@ public class Menu {
         MenuText();
     }
 
-    public void MenuText() throws SQLException, ClassNotFoundException, IOException {
+    private void MenuText() throws SQLException, ClassNotFoundException, IOException {
 
         System.out.println("\n Какое место вас интересует?\n Введите нужный пункт меню с клавиатуры\n");
         System.out.println(" 1. Бары\n 2. Парки\n 3. Рестораны\n 4. Театры\n 5. Кинотеатры\n 6. Торговые центры\n");
@@ -33,7 +33,7 @@ public class Menu {
         InputMenuNumber();
     }
 
-    public void InputMenuNumber() throws SQLException, ClassNotFoundException, IOException {
+    private void InputMenuNumber() throws SQLException, ClassNotFoundException, IOException {
 
         try {
             Scanner scnINT = new Scanner(System.in);
@@ -78,7 +78,7 @@ public class Menu {
         }
     }
 
-    public void AddToList() throws SQLException, ClassNotFoundException, IOException {
+    private void AddToList() throws SQLException, ClassNotFoundException, IOException {
 
         System.out.println("\n Хотите добавить место в список? (Напишите да или нет)");
         Scanner scnSTR = new Scanner(System.in);
@@ -97,7 +97,7 @@ public class Menu {
 
     }
 
-    public void AddString() throws SQLException, ClassNotFoundException, IOException { //добавляет элемент в список
+    private void AddString() throws SQLException, ClassNotFoundException, IOException { //добавляет элемент в список
 
         System.out.print(" ");
 
@@ -109,7 +109,7 @@ public class Menu {
         try {
             Scanner scnINT = new Scanner(System.in);
             int i = scnINT.nextInt();
-            String k = Globals.ElementsOfList[i-1];
+            String k = Connector.elements[i-1];
             Globals.list.add(k);
             if (Collections.frequency(Globals.list, k) >= 2) {
                 System.out.println("\n Это место уже есть в списке");
@@ -131,7 +131,7 @@ public class Menu {
         OutList();
     }
 
-    public void OutList() {
+    private void OutList() {
 
         System.out.println("\n Список ваших избранных мест:");
         Header();
@@ -139,7 +139,7 @@ public class Menu {
             System.out.println(Globals.list.get(y));
     }
 
-    public void ListMenu() throws IOException, SQLException, ClassNotFoundException{
+    private void ListMenu() throws IOException, SQLException, ClassNotFoundException{
 
         System.out.println("\n Выберите дальнешее действие:");
         System.out.println("\n 1. Перейти в главное меню\n 2. Вывести список на экран\n 3. Добавить место в список" +
@@ -218,7 +218,7 @@ public class Menu {
         }
     }
 
-    public void MainMenu() throws SQLException, IOException, ClassNotFoundException {
+    private void MainMenu() throws SQLException, IOException, ClassNotFoundException {
 
         if (!Globals.list.isEmpty()) {
             System.out.println("\n Вы точно хотите перейти в главное меню? (Все несохраненные данные будут утеряны)");
@@ -228,7 +228,7 @@ public class Menu {
         else MenuText();
     }
 
-    public void MainMenuInput() throws IOException, SQLException, ClassNotFoundException {
+    private void MainMenuInput() throws IOException, SQLException, ClassNotFoundException {
 
         Scanner scnSTR = new Scanner(System.in);
         System.out.print(" ");
@@ -248,7 +248,7 @@ public class Menu {
         }
     }
 
-    public void SystemOut() throws SQLException, IOException, ClassNotFoundException {
+    private void SystemOut() throws SQLException, IOException, ClassNotFoundException {
 
         if (!Globals.list.isEmpty()) {
             System.out.println("\n Вы точно хотите выйти из системы? (Все несохраненные данные будут утеряны)");
@@ -261,7 +261,7 @@ public class Menu {
         }
     }
 
-    public void SystemOutInput() throws SQLException, IOException, ClassNotFoundException {
+    private void SystemOutInput() throws SQLException, IOException, ClassNotFoundException {
 
         Scanner scnSTR = new Scanner(System.in);
         System.out.print(" ");
@@ -282,7 +282,7 @@ public class Menu {
         }
     }
 
-    public void DeleteList() throws IOException, SQLException, ClassNotFoundException {
+    private void DeleteList() throws IOException, SQLException, ClassNotFoundException {
 
         Scanner scnSTR = new Scanner(System.in);
         System.out.print(" ");
@@ -301,7 +301,7 @@ public class Menu {
         }
     }
 
-    public void DeletePlace() throws IOException, SQLException, ClassNotFoundException {
+    private void DeletePlace() throws IOException, SQLException, ClassNotFoundException {
 
         Scanner scnSTR = new Scanner(System.in);
         System.out.print(" ");
@@ -319,7 +319,7 @@ public class Menu {
         }
     }
 
-    public void InputDeletePlace() throws IOException, SQLException, ClassNotFoundException, NumberFormatException {
+    private void InputDeletePlace() throws IOException, SQLException, ClassNotFoundException, NumberFormatException {
 
         OutList();
         System.out.println("\n Введите номер места, которое требуется удалить (для выхода в меню редактирования списка введите 0)");
@@ -337,7 +337,6 @@ public class Menu {
             if (delnum > Globals.SizeOfList || delnum <= 0) {
                 System.out.print("\n Вы ввели несуществующий номер");
                 InputDeletePlace();
-                return;
             }
 
             else {
@@ -359,8 +358,7 @@ public class Menu {
                     InputDeletePlace();
                 }
 
-                else if (delnum >= 10 && Globals.list.size()>=10) {
-
+                else if (Globals.list.size() >= 10) {
                     for (int i = 10; i < Globals.list.size(); i++) {
                         String chr = Globals.list.get(i);
                         char chrINT1 = chr.charAt(1);
@@ -380,14 +378,13 @@ public class Menu {
                     System.out.println("\n Элемент не найден");
                 }
 
-                else if (delnum >= 10 && Globals.list.size()<10) {
-
+                else {
                     for (int i = 0; i < Globals.list.size(); i++) {
                         String chr = Globals.list.get(i);
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
-                        int Num1 = Integer.valueOf(chrINT2);
+                        int Num1 = (int)chrINT2;
 
                         if (Num1 != 32) {
                             String chrINT12 = chrINT1 + "" + chrINT2;
@@ -400,9 +397,7 @@ public class Menu {
                                 return;
                             }
                         }
-                    }
-
-                    System.out.println("\n Элемент не найден");
+                    } System.out.println("\n Элемент не найден");
                 }
             }
         } catch(InputMismatchException e) {
@@ -411,7 +406,7 @@ public class Menu {
         }
     }
 
-    public void InputPlace() {
+    private void InputPlace() {
 
         System.out.println("\n Введите номер места, которое требуется вывести");
 
@@ -440,8 +435,7 @@ public class Menu {
                     }
                 }
 
-                else if (outnum >= 10 && Globals.list.size()>=10) {
-
+                else if (Globals.list.size()>=10) {
                     for (int i = 10; i < Globals.list.size(); i++) {
                         String chr = Globals.list.get(i);
                         char chrINT1 = chr.charAt(1);
@@ -458,14 +452,13 @@ public class Menu {
                     }
                 }
 
-                else if (outnum >= 10 && Globals.list.size()<10) {
-
+                else {
                     for (int i = 0; i < Globals.list.size(); i++) {
                         String chr = Globals.list.get(i);
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
-                        int Num1 = Integer.valueOf(chrINT2);
+                        int Num1 = (int)chrINT2;
 
                         if (Num1 != 32) {
                             String chrINT12 = chrINT1 + "" + chrINT2;
@@ -479,7 +472,6 @@ public class Menu {
                         }
                     }
                 }
-
                 System.out.println("\n Элемент не найден");
                 InputPlace();
             }
@@ -488,7 +480,7 @@ public class Menu {
         }
     }
 
-    public void CreateFile() throws SQLException, IOException, ClassNotFoundException {
+    private void CreateFile() throws SQLException, IOException, ClassNotFoundException {
 
         File folderName = new File("./Places/" + Globals.name);
         folderName.mkdir();
@@ -522,7 +514,7 @@ public class Menu {
         System.out.println("\n Файл " + Globals.FileName + " успешно записан в папку Places");
     }
 
-    public void CreateFileInput() throws SQLException, IOException, ClassNotFoundException {
+    private void CreateFileInput() throws SQLException, IOException, ClassNotFoundException {
 
         Scanner scnSTR = new Scanner(System.in);
         System.out.print(" ");
@@ -541,7 +533,7 @@ public class Menu {
 
     }
 
-    public void DeleteFile() throws SQLException, IOException, ClassNotFoundException {
+    private void DeleteFile() throws SQLException, IOException, ClassNotFoundException {
 
         System.out.println("\n Напишите имя файла, который нужно удалить");
 
@@ -561,7 +553,7 @@ public class Menu {
         DeleteFileInput(NameInput);
     }
 
-    public void DeleteFileInput(String NameInput) throws IOException, SQLException, ClassNotFoundException {
+    private void DeleteFileInput(String NameInput) throws IOException, SQLException, ClassNotFoundException {
 
         Scanner scnSTRdel = new Scanner(System.in);
         System.out.print(" ");
@@ -582,36 +574,30 @@ public class Menu {
         }
     }
 
-    public void Header() {
+    void Header() {
         System.out.println("\n № | Название               | Оценка  | Адрес                    ");
         System.out.println(" ----------------------------------------------------------------------------");
     }
 
-    public void BDInfo(String BDName) {
+    private void BDInfo(String BDName) {
         Globals.FileName = BDName;
         Globals.SizeOfList = Connector.y;
-        Globals.ElementsOfList = new String[Globals.SizeOfList];
-
-        for (int i=0; i<Globals.SizeOfList; i++) {
-            Globals.ElementsOfList[i] = Connector.elements[i];
-        }
     }
 
-    public void EmptyList() throws IOException, SQLException, ClassNotFoundException {
+    private void EmptyList() throws IOException, SQLException, ClassNotFoundException {
         if (Globals.list.size() == 0) {
             System.out.println("\n Список пуст\n");
             ListMenu();
-            return;
         }
     }
 
-    public void UserInformation() throws UnknownHostException {
+    private void UserInformation() throws UnknownHostException {
         System.out.println("\n Логин: " + Globals.name);
         IPAddress();
         System.out.println(" Дата регистрации: " + Globals.FileString[2]);
     }
 
-    public void IPAddress() throws UnknownHostException {
+    private void IPAddress() throws UnknownHostException {
         InetAddress localhost = InetAddress.getLocalHost();
         System.out.println(" Локальный IP адрес: " + (localhost.getHostAddress()).trim());
 

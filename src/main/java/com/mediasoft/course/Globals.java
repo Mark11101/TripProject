@@ -3,8 +3,7 @@ package com.mediasoft.course;
 import java.util.ArrayList;
 
 public class Globals {
-    static ArrayList<String> list = new ArrayList<String>();
-    static String[] ElementsOfList = null;
+    static ArrayList<String> list = new ArrayList<>();
     static int SizeOfList;
     static String FileName;
     public static final String host = "127.0.0.1";

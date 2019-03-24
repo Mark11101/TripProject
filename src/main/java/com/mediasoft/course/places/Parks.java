@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class Parks {
 
-    public static Object ParksList() throws SQLException, ClassNotFoundException  {
+    public static void ParksList() throws SQLException, ClassNotFoundException  {
 
         Connector connector = new Connector();
         Statement statement1 = connector.ConnectorToBD();
@@ -20,7 +20,5 @@ public class Parks {
         System.out.println("\n Таблица парков Ульяновска:");
 
         connector.OutBD(resultSet, resultSetCNT);
-
-        return null;
     }
 }
