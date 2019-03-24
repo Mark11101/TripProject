@@ -1,5 +1,8 @@
 package com.mediasoft.course;
 
+import com.mediasoft.course.authorization.Client;
+import com.mediasoft.course.places.*;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.URL;
@@ -8,8 +11,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-
 
 public class Menu {
 
@@ -202,8 +203,7 @@ public class Menu {
                     UserInformation();
                     ListMenu();
                 case (11):
-                    Client client = new Client();
-                    client.run();
+                    SystemOut();
                     break;
                 case (12):
                     System.exit(0);
@@ -221,7 +221,7 @@ public class Menu {
     public void MainMenu() throws SQLException, IOException, ClassNotFoundException {
 
         if (!Globals.list.isEmpty()) {
-            System.out.println("\n Вы точно хотите перейти в главное меню? (Список избранных мест будет утерян)");
+            System.out.println("\n Вы точно хотите перейти в главное меню? (Все несохраненные данные будут утеряны)");
             System.out.println(" Напишите да или нет");
             MainMenuInput();
         }
@@ -245,6 +245,40 @@ public class Menu {
         else {
             System.out.println("\n Напишите да или нет");
             MainMenuInput();
+        }
+    }
+
+    public void SystemOut() throws SQLException, IOException, ClassNotFoundException {
+
+        if (!Globals.list.isEmpty()) {
+            System.out.println("\n Вы точно хотите выйти из системы? (Все несохраненные данные будут утеряны)");
+            System.out.println(" Напишите да или нет");
+            SystemOutInput();
+        }
+        else {
+            Client client = new Client();
+            client.run();
+        }
+    }
+
+    public void SystemOutInput() throws SQLException, IOException, ClassNotFoundException {
+
+        Scanner scnSTR = new Scanner(System.in);
+        System.out.print(" ");
+        String choose = scnSTR.nextLine();
+
+        if (choose.equals("да") || choose.equals("lf")) {
+            Globals.list.clear();
+            Client client = new Client();
+            client.run();
+        }
+
+        else if (choose.equals("нет") || choose.equals("ytn"))
+            ListMenu();
+
+        else {
+            System.out.println("\n Напишите да или нет");
+            SystemOutInput();
         }
     }
 
@@ -454,7 +488,7 @@ public class Menu {
         }
     }
 
-    public void CreateFile() throws IOException {
+    public void CreateFile() throws SQLException, IOException, ClassNotFoundException {
 
         File folderName = new File("./Places/" + Globals.name);
         folderName.mkdir();
@@ -464,6 +498,13 @@ public class Menu {
         if (!file.exists()) {
             file.createNewFile();
         }
+
+        else {
+            System.out.println("\n Список " + Globals.FileName + " уже существует");
+            System.out.println(" Переписать файл? (Введите да или нет)");
+            CreateFileInput();
+        }
+
 
         FileWriter fw = new FileWriter(file);
         BufferedWriter bw = new BufferedWriter(fw);
@@ -479,6 +520,25 @@ public class Menu {
         bw.close();
 
         System.out.println("\n Файл " + Globals.FileName + " успешно записан в папку Places");
+    }
+
+    public void CreateFileInput() throws SQLException, IOException, ClassNotFoundException {
+
+        Scanner scnSTR = new Scanner(System.in);
+        System.out.print(" ");
+        String choosePlace = scnSTR.nextLine();
+
+        if (choosePlace.equals("да") || choosePlace.equals("lf"))
+            System.out.print("");
+
+        else if (choosePlace.equals("нет") || choosePlace.equals("ytn"))
+            ListMenu();
+
+        else {
+            System.out.println("\n Напишите да или нет");
+            CreateFileInput();
+        }
+
     }
 
     public void DeleteFile() throws SQLException, IOException, ClassNotFoundException {
