@@ -1,6 +1,7 @@
 package com.mediasoft.course.places;
 
 import com.mediasoft.course.Connector;
+import com.mediasoft.course.OutputBD;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ public class Cinemas {
 
         System.out.println("\n Таблица кинотеатров Ульяновска:");
 
-        connector.OutBD(resultSet, resultSetCNT);
+        OutputBD outputBD = new OutputBD();
+        outputBD.OutBD(resultSet, resultSetCNT);
     }
 }

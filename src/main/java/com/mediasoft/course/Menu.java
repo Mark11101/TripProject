@@ -1,6 +1,7 @@
 package com.mediasoft.course;
 
 import com.mediasoft.course.authorization.Client;
+import com.mediasoft.course.authorization.Server;
 import com.mediasoft.course.places.*;
 
 import java.io.*;
@@ -8,11 +9,17 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
+
+    private ArrayList<String> list = new ArrayList<>();
+    private int SizeOfList;
+    private String FileName;
+    public static String name;
 
     public void Info() throws SQLException, IOException, ClassNotFoundException {
         System.out.println("-------------------------------------------------------------------------------------------" +
@@ -101,7 +108,7 @@ public class Menu {
 
         System.out.print(" ");
 
-        if (Globals.list.size() == Globals.SizeOfList) {
+        if (list.size() == SizeOfList) {
             System.out.println("\n Вы записали все возможные места");
             ListMenu();
         }
@@ -109,12 +116,12 @@ public class Menu {
         try {
             Scanner scnINT = new Scanner(System.in);
             int i = scnINT.nextInt();
-            String k = Connector.elements[i-1];
-            Globals.list.add(k);
-            if (Collections.frequency(Globals.list, k) >= 2) {
+            String k = OutputBD.elements[i-1];
+            list.add(k);
+            if (Collections.frequency(list, k) >= 2) {
                 System.out.println("\n Это место уже есть в списке");
                 System.out.println(" Выберите другое");
-                Globals.list.remove(k);
+                list.remove(k);
                 AddString();
                 return;
             }
@@ -135,8 +142,7 @@ public class Menu {
 
         System.out.println("\n Список ваших избранных мест:");
         Header();
-        for (int y=0; y<Globals.list.size(); y++)
-            System.out.println(Globals.list.get(y));
+        for (String s : list) System.out.println(s);
     }
 
     private void ListMenu() throws IOException, SQLException, ClassNotFoundException{
@@ -176,7 +182,7 @@ public class Menu {
                     break;
                 case (5):
                     EmptyList();
-                    System.out.println("\n Количество мест в списке: " + Globals.list.size());
+                    System.out.println("\n Количество мест в списке: " + list.size());
                     ListMenu();
                     break;
                 case (6):
@@ -220,7 +226,7 @@ public class Menu {
 
     private void MainMenu() throws SQLException, IOException, ClassNotFoundException {
 
-        if (!Globals.list.isEmpty()) {
+        if (!list.isEmpty()) {
             System.out.println("\n Вы точно хотите перейти в главное меню? (Все несохраненные данные будут утеряны)");
             System.out.println(" Напишите да или нет");
             MainMenuInput();
@@ -235,7 +241,7 @@ public class Menu {
         String choose = scnSTR.nextLine();
 
         if (choose.equals("да") || choose.equals("lf")) {
-            Globals.list.clear();
+            list.clear();
             MenuText();
         }
 
@@ -250,7 +256,7 @@ public class Menu {
 
     private void SystemOut() throws SQLException, IOException, ClassNotFoundException {
 
-        if (!Globals.list.isEmpty()) {
+        if (!list.isEmpty()) {
             System.out.println("\n Вы точно хотите выйти из системы? (Все несохраненные данные будут утеряны)");
             System.out.println(" Напишите да или нет");
             SystemOutInput();
@@ -268,7 +274,7 @@ public class Menu {
         String choose = scnSTR.nextLine();
 
         if (choose.equals("да") || choose.equals("lf")) {
-            Globals.list.clear();
+            list.clear();
             Client client = new Client();
             client.run();
         }
@@ -289,7 +295,7 @@ public class Menu {
         String choose = scnSTR.nextLine();
 
         if (choose.equals("да") || choose.equals("lf")) {
-            Globals.list.clear();
+            list.clear();
         }
 
         else if (choose.equals("нет") || choose.equals("ytn"))
@@ -334,20 +340,20 @@ public class Menu {
                 return;
             }
 
-            if (delnum > Globals.SizeOfList || delnum <= 0) {
+            if (delnum > SizeOfList || delnum <= 0) {
                 System.out.print("\n Вы ввели несуществующий номер");
                 InputDeletePlace();
             }
 
             else {
                 if (delnum < 10) {
-                    for (int i = 0; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                    for (int i = 0; i < list.size(); i++) {
+                        String chr = list.get(i);
                         int chrINT1 = Character.getNumericValue(chr.charAt(1));
                         int chrINT2 = Character.getNumericValue(chr.charAt(2));
 
                         if (chrINT1 == delnum && !(chrINT2 >= 0)) {
-                            Globals.list.remove(chr);
+                            list.remove(chr);
                             EmptyList();
                             InputDeletePlace();
                             return;
@@ -358,9 +364,9 @@ public class Menu {
                     InputDeletePlace();
                 }
 
-                else if (Globals.list.size() >= 10) {
-                    for (int i = 10; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                else if (list.size() >= 10) {
+                    for (int i = 10; i < list.size(); i++) {
+                        String chr = list.get(i);
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
@@ -368,7 +374,7 @@ public class Menu {
                         int Num = Integer.parseInt(chrINT12);
 
                         if (Num == delnum) {
-                            Globals.list.remove(chr);
+                            list.remove(chr);
                             EmptyList();
                             InputDeletePlace();
                             return;
@@ -379,8 +385,8 @@ public class Menu {
                 }
 
                 else {
-                    for (int i = 0; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                    for (int i = 0; i < list.size(); i++) {
+                        String chr = list.get(i);
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
@@ -391,7 +397,7 @@ public class Menu {
                             int Num = Integer.parseInt(chrINT12);
 
                             if (Num == delnum) {
-                                Globals.list.remove(chr);
+                                list.remove(chr);
                                 EmptyList();
                                 InputDeletePlace();
                                 return;
@@ -415,29 +421,28 @@ public class Menu {
             System.out.print(" ");
             int outnum = scnINT.nextInt();
 
-            if (outnum > Globals.SizeOfList || outnum <= 0) {
+            if (outnum > SizeOfList || outnum <= 0) {
                 System.out.print("\n Вы ввели несуществующий номер");
                 InputPlace();
             }
 
             else {
                 if (outnum < 10) {
-                    for (int i = 0; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                    for (String chr : list) {
                         int chrINT1 = Character.getNumericValue(chr.charAt(1));
                         int chrINT2 = Character.getNumericValue(chr.charAt(2));
 
-                        if (chrINT1== outnum && !(chrINT2 >= 0)) {
+                        if (chrINT1 == outnum && !(chrINT2 >= 0)) {
                             Header();
-                            System.out.println(Globals.list.get(i));
+                            System.out.println(chr);
                             return;
                         }
                     }
                 }
 
-                else if (Globals.list.size()>=10) {
-                    for (int i = 10; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                else if (list.size()>=10) {
+                    for (int i = 10; i < list.size(); i++) {
+                        String chr = list.get(i);
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
@@ -446,19 +451,18 @@ public class Menu {
 
                         if (Num == outnum) {
                             Header();
-                            System.out.println(Globals.list.get(i));
+                            System.out.println(list.get(i));
                             return;
                         }
                     }
                 }
 
                 else {
-                    for (int i = 0; i < Globals.list.size(); i++) {
-                        String chr = Globals.list.get(i);
+                    for (String chr : list) {
                         char chrINT1 = chr.charAt(1);
                         char chrINT2 = chr.charAt(2);
 
-                        int Num1 = (int)chrINT2;
+                        int Num1 = (int) chrINT2;
 
                         if (Num1 != 32) {
                             String chrINT12 = chrINT1 + "" + chrINT2;
@@ -466,7 +470,7 @@ public class Menu {
 
                             if (Num == outnum) {
                                 Header();
-                                System.out.println(Globals.list.get(i));
+                                System.out.println(chr);
                                 return;
                             }
                         }
@@ -482,17 +486,17 @@ public class Menu {
 
     private void CreateFile() throws SQLException, IOException, ClassNotFoundException {
 
-        File folderName = new File("./Places/" + Globals.name);
+        File folderName = new File("./Places/" + name);
         folderName.mkdir();
 
-        File file = new File("Places/" + Globals.name + "/" + Globals.FileName + ".txt");
+        File file = new File("Places/" + name + "/" + FileName + ".txt");
 
         if (!file.exists()) {
             file.createNewFile();
         }
 
         else {
-            System.out.println("\n Список " + Globals.FileName + " уже существует");
+            System.out.println("\n Список " + FileName + " уже существует");
             System.out.println(" Переписать файл? (Введите да или нет)");
             CreateFileInput();
         }
@@ -504,14 +508,14 @@ public class Menu {
         bw.write("\n № | Название               | Оценка  | Адрес                    ");
         bw.write("\n ----------------------------------------------------------------------------\n");
 
-        for (int i = 0; i < Globals.list.size(); i++) {
-            bw.write(Globals.list.get(i) + "\n");
+        for (String s : list) {
+            bw.write(s + "\n");
         }
 
         bw.flush();
         bw.close();
 
-        System.out.println("\n Файл " + Globals.FileName + " успешно записан в папку Places");
+        System.out.println("\n Файл " + FileName + " успешно записан в папку Places");
     }
 
     private void CreateFileInput() throws SQLException, IOException, ClassNotFoundException {
@@ -541,7 +545,7 @@ public class Menu {
         System.out.print(" ");
         String NameInput = scnSTR.nextLine();
 
-        File file1 = new File("Places/" + Globals.name + "/" + NameInput + ".txt");
+        File file1 = new File("Places/" + name + "/" + NameInput + ".txt");
 
         if (!file1.exists()) {
             System.out.println("\n Файла не существует");
@@ -560,7 +564,7 @@ public class Menu {
         String choose = scnSTRdel.nextLine();
 
         if (choose.equals("да") || choose.equals("lf")) {
-            File filedel = new File("Places/" + Globals.name + "/" + NameInput + ".txt");
+            File filedel = new File("Places/" + name + "/" + NameInput + ".txt");
             filedel.delete();
             System.out.println("\n Файл удален");
         }
@@ -580,21 +584,21 @@ public class Menu {
     }
 
     private void BDInfo(String BDName) {
-        Globals.FileName = BDName;
-        Globals.SizeOfList = Connector.y;
+        FileName = BDName;
+        SizeOfList = OutputBD.y;
     }
 
     private void EmptyList() throws IOException, SQLException, ClassNotFoundException {
-        if (Globals.list.size() == 0) {
+        if (list.size() == 0) {
             System.out.println("\n Список пуст\n");
             ListMenu();
         }
     }
 
     private void UserInformation() throws UnknownHostException {
-        System.out.println("\n Логин: " + Globals.name);
+        System.out.println("\n Логин: " + name);
         IPAddress();
-        System.out.println(" Дата регистрации: " + Globals.FileString[2]);
+        System.out.println(" Дата регистрации: " + Server.FileString[2]);
     }
 
     private void IPAddress() throws UnknownHostException {

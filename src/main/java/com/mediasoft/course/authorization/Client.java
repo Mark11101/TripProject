@@ -16,6 +16,7 @@ public class Client implements Runnable {
     private static Server s = new Server();
     private static Thread th = new Thread(s);
     private static Client cn = new Client();
+    boolean isRunning = true;
 
     public static void stream() {
         th.start();
@@ -45,17 +46,17 @@ public class Client implements Runnable {
                 System.out.println("\n Для регистрации введите логин и пароль:");
             }
 
-            while (Globals.isRunning) {
+            while (isRunning) {
                 Socket socket = new Socket(Globals.host, Globals.port);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                 System.out.print("\n Логин: ");
-                Globals.name = scnSTR.nextLine();
+                Menu.name = scnSTR.nextLine();
                 System.out.print(" Пароль: ");
                 String password = scnSTR.nextLine();
 
-                out.write(Globals.name + "\n");
+                out.write(Menu.name + "\n");
                 out.flush();
 
                 out.write(password + "\n");
@@ -110,7 +111,7 @@ public class Client implements Runnable {
 
     private void close() {
         try {
-            Globals.isRunning = false;
+            isRunning = false;
         } catch (Exception e) {e.printStackTrace();}
     }
 }
